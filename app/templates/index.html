@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block titulo %}INDEX USUARIO{% endblock %} {% block contenido %}
+
+{% comment %} <h1>Bienvenid@: {{request.session.usuario.name}}</h1> {% endcomment %}
+<div class="container mt-2">
+    <h3>Post a Message</h3>
+    <div class="row">
+        <div class="col-12">
+            <form method="POST" action="post_message">
+                {% csrf_token %}
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" name="message"></textarea>
+                <button type="submit" class="btn btn-primary mt-4">Post a Message</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        {% for m in mensajes %}
+        <div class="container mt-4">
+            <h4>Message:</h4>
+            <h5>{{m.user}} - {{m.created_at}}</h5>
+            <p>{{m.message}}</p>
+            {%for c in m.comments.all%}
+            <div class="container ms-5">
+                <h5>Comment:</h5>
+                <h5>{{c.user}}</h5>
+                <p>{{c.comment_u}}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col ms-5">
+                    <h1></h1>
+                    <form method="post" action="add_comment">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_id" value="{{m.id}}">
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" name="tcomment"></textarea>
+                        <button type="submit" class="btn btn-primary mt-4">Post a Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<div class="row">
+    <a class="mt-4" href="/logout">SALIR DEL SISTEMA</a>
+</div>
+</div>
+
+
+{% endblock %}
